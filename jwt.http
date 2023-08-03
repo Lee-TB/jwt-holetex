@@ -1,0 +1,27 @@
+POST http://localhost:5500/login
+Content-Type: application/json
+
+{
+    "username": "lyduc",
+    "password": "123456"
+}
+
+### refresh token
+POST http://localhost:5500/refreshtoken
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx5ZHVjIiwiaWF0IjoxNjkxMDYzODY0LCJleHAiOjE2OTEwNjM5MjR9.2GNI5QLlDbjdWlUGeTBLFGNlCLyFl-lmnj3gWN6TV08"
+}
+
+### logout
+POST http://localhost:5500/logout
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx5ZHVjIiwiaWF0IjoxNjkxMDYzODY0LCJleHAiOjE2OTEwNjM5MjR9.2GNI5QLlDbjdWlUGeTBLFGNlCLyFl-lmnj3gWN6TV08"
+}
+
+### get books
+GET http://localhost:5000/books
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx5ZHVjIiwiaWF0IjoxNjkxMDYzOTA4LCJleHAiOjE2OTEwNjM5Mjh9.WQihwqhDmG8-XvN4k3gxjy3mIC9xZB9l5o1iwkriKtk
