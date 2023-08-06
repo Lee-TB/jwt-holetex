@@ -24,4 +24,4 @@ Content-Type: application/json
 
 ### get books
 GET http://localhost:5000/books
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx5ZHVjIiwiaWF0IjoxNjkxMDYzOTA4LCJleHAiOjE2OTEwNjM5Mjh9.WQihwqhDmG8-XvN4k3gxjy3mIC9xZB9l5o1iwkriKtk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx5ZHVjIiwiaWF0IjoxNjkxMjA3NzMzLCJleHAiOjE2OTEyMDc3NTN9.PKyQVOd1JEX0S37MotwpN51gjraeQO9SfDlzCIThPNU

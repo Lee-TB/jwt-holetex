@@ -1,10 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import cors from "cors";
+import { StatusCodes, ReasonPhrases } from "http-status-codes";
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 const books = [
@@ -20,25 +23,33 @@ const books = [
   },
 ];
 
-
 function authenToken(req, res, next) {
-    const authorizationHeader = req.headers['authorization']
-    const token = authorizationHeader.split(' ')[1];
-    if(!token) {
-        res.sendStatus(401)
+  const authorizationHeader = req.headers["authorization"];
+  const token = authorizationHeader.split(" ")[1];
+
+  if (!token) {
+    res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({
+        code: StatusCodes.UNAUTHORIZED,
+        status: ReasonPhrases.UNAUTHORIZED,
+      });
+  }
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+    if (err) {
+      res
+        .status(StatusCodes.FORBIDDEN)
+        .json({ code: StatusCodes.FORBIDDEN, status: ReasonPhrases.FORBIDDEN, message: 'Invalid token' });
+    } else {
+      next();
     }
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
-        if(err) {
-            res.sendStatus(403)
-        }
-        console.log({data})
-        next()
-    })
+  });
 }
 
 app.get("/books", authenToken, (req, res) => {
-  res.json({
-    status: "success",
+  res.status(StatusCodes.OK).json({
+    code: StatusCodes.OK,
+    status: ReasonPhrases.OK,
     data: { books },
   });
 });
