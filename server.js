@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import cors from "cors";
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 
 dotenv.config();
 
@@ -28,18 +28,15 @@ function authenToken(req, res, next) {
   const token = authorizationHeader.split(" ")[1];
 
   if (!token) {
-    res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json({
-        code: StatusCodes.UNAUTHORIZED,
-        status: ReasonPhrases.UNAUTHORIZED,
-      });
+    res.status(StatusCodes.UNAUTHORIZED).json({
+      message: "please provide a token",
+    });
   }
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
     if (err) {
-      res
-        .status(StatusCodes.FORBIDDEN)
-        .json({ code: StatusCodes.FORBIDDEN, status: ReasonPhrases.FORBIDDEN, message: 'Invalid token' });
+      res.status(StatusCodes.FORBIDDEN).json({
+        message: "Invalid token",
+      });
     } else {
       next();
     }
@@ -48,9 +45,7 @@ function authenToken(req, res, next) {
 
 app.get("/books", authenToken, (req, res) => {
   res.status(StatusCodes.OK).json({
-    code: StatusCodes.OK,
-    status: ReasonPhrases.OK,
-    data: { books },
+    books,
   });
 });
 
