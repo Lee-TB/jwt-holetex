@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { loginAPI } from "@/api/login";
 import { useUserStore } from "@/stores/user";
+import { authInstance } from "@/api/authInstance";
 
 const { setAccessToken, setRefreshToken, setDisplayName } = useUserStore();
 const router = useRouter();
@@ -10,14 +10,18 @@ const router = useRouter();
 const usernameInput = ref("");
 const passwordInput = ref("");
 
-async function handleLogin() {  
+async function handleLogin() {
   if (usernameInput.value && passwordInput.value) {
+    // validate
     const loginInfo = {
       username: usernameInput.value.trim(),
       password: passwordInput.value.trim(),
     };
+
+    // sent to server
     try {
-      const { data } = await loginAPI(loginInfo);
+      const res = await authInstance.post("/login", { ...loginInfo });
+      const { data } = res;
       setAccessToken(data.accessToken);
       setRefreshToken(data.refreshToken);
       setDisplayName(data.displayName);
