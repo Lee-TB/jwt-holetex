@@ -34,6 +34,7 @@ async function handleLogin() {
       router.push({ name: "home" });
     } catch (error) {
       alert(error);
+      console.log(error)
     }
   }
 }
