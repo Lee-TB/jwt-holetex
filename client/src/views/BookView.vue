@@ -2,20 +2,16 @@
 import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useBookStore } from "@/stores/book";
-import { useUserStore } from "@/stores/user";
-import { getBooksAPI } from "@/api/books";
+import { serverInstance } from "@/api/serverInstance";
 
 const bookStore = useBookStore();
 const { books } = storeToRefs(bookStore);
 const { setBooks } = bookStore;
 
-const userStore = useUserStore();
-const { accessToken } = storeToRefs(userStore);
-
 onMounted(async () => {
-  const res = await getBooksAPI(accessToken.value);
-  if(res?.data?.books) {
-    setBooks(res.data.books)
+  const res = await serverInstance.get('/books');  
+  if (res?.data?.books) {
+    setBooks(res.data.books);
   }
 });
 </script>
