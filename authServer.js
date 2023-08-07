@@ -1,3 +1,4 @@
+// AUTH SERVER
 import express from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
@@ -52,14 +53,11 @@ app.post("/login", (req, res) => {
   );
   refreshTokenList.push(refreshToken);
 
-  const data = {
+
+  res.status(StatusCodes.OK).json({
     accessToken,
     refreshToken,
     displayName: foundUser.displayName || `@${body.username}`,
-  };
-  res.json({
-    status: StatusCodes.OK,
-    data,
   });
 });
 
@@ -71,7 +69,7 @@ app.post("/refreshToken", (req, res) => {
   if (!refreshTokenList.includes(refreshToken)) res.status(StatusCodes.FORBIDDEN).json({status: ReasonPhrases.FORBIDDEN});
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
     if (err) {
-      res.sendStatus(403);
+      res.sendStatus(StatusCodes.FORBIDDEN);
     }
 
     const accessToken = jwt.sign(
@@ -81,17 +79,14 @@ app.post("/refreshToken", (req, res) => {
         expiresIn: "20s",
       }
     );
-    res.json({ accessToken });
+    res.status(StatusCodes.OK).json({ accessToken });
   });
 });
 
 app.post("/logout", (req, res) => {
   const refreshToken = req.body.refreshToken;
   refreshTokenList = refreshTokenList.filter((token) => token !== refreshToken);
-  res.status(StatusCodes.OK).json({
-    status: ReasonPhrases.OK,
-    message: 'logout success'
-  });
+  res.status(StatusCodes.OK).json({message: 'logout successful'})
 });
 
 const PORT = 5500;
