@@ -17,11 +17,10 @@ const users = [
     username: "lyduc",
     password: "123456",
     displayName: "Duc Tran",
-    age: 20
+    age: 20,
   },
 ];
 
-let refreshTokenList = [];
 app.post("/login", (req, res) => {
   const body = req.body;
   // Authentication
@@ -39,7 +38,7 @@ app.post("/login", (req, res) => {
     { username: body.username },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "20s",
+      expiresIn: "10s",
     }
   );
 
@@ -48,11 +47,9 @@ app.post("/login", (req, res) => {
     { username: body.username },
     process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn: "60s",
+      expiresIn: "20s",
     }
   );
-  refreshTokenList.push(refreshToken);
-
 
   res.status(StatusCodes.OK).json({
     accessToken,
@@ -63,10 +60,10 @@ app.post("/login", (req, res) => {
 
 app.post("/refreshToken", (req, res) => {
   const refreshToken = req.body.refreshToken;
-  if (!refreshToken) res.sendStatus(StatusCodes.UNAUTHORIZED);
+  if (!refreshToken) {
+    res.sendStatus(StatusCodes.UNAUTHORIZED);
+  }
 
-  // check refresh Token in database
-  if (!refreshTokenList.includes(refreshToken)) res.status(StatusCodes.FORBIDDEN).json({status: ReasonPhrases.FORBIDDEN});
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
     if (err) {
       res.sendStatus(StatusCodes.FORBIDDEN);
@@ -76,17 +73,11 @@ app.post("/refreshToken", (req, res) => {
       { username: data.username },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "20s",
+        expiresIn: "10s",
       }
     );
     res.status(StatusCodes.OK).json({ accessToken });
   });
-});
-
-app.post("/logout", (req, res) => {
-  const refreshToken = req.body.refreshToken;
-  refreshTokenList = refreshTokenList.filter((token) => token !== refreshToken);
-  res.status(StatusCodes.OK).json({message: 'logout successful'})
 });
 
 const PORT = 5500;
