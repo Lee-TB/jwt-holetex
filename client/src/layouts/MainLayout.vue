@@ -1,24 +1,14 @@
 <script setup>
 import { RouterView, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
-import { authInstance } from "@/api/authInstance";
-import { REFRESH_TOKEN_STORAGE_KEY } from "@/constants";
 
 const router = useRouter();
 const userStore = useUserStore();
 const { displayName } = userStore;
 
 const handleLogout = async () => {
-  try {
-    await authInstance.post("/logout", {
-      refreshToken: localStorage.getItem(REFRESH_TOKEN_STORAGE_KEY),
-    });
-    userStore.$reset();
-    router.push({ name: "login" });
-  } catch (error) {
-    console.log(error);
-    alert('logout err')
-  }
+  userStore.$reset();
+  router.push({ name: "login" });
 };
 </script>
 
